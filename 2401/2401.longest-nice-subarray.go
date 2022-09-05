@@ -1,36 +1,17 @@
 package leetcode
 
 func longestNiceSubarray(nums []int) int {
-	if len(nums) == 1 {
-		return 1
-	}
-
-	l := make([]int, len(nums))
-	for i, n := range nums {
-		l[i]++
-		for _, m := range nums[i+1:] {
-			if n&m != 0 {
-				break
-			}
-			l[i]++
-		}
-	}
-
+	j := 0
+	used := 0
 	max := 1
-	for i, v := range l {
-		lmax := v
-		for _, m := range l[i+1:] {
-			v--
-			if v == 0 {
-				break
-			}
-			if v > m {
-				lmax -= v - m
-				v = m
-			}
+	for i := range nums {
+		for (used & nums[i]) != 0 {
+			used ^= nums[j]
+			j++
 		}
-		if max < lmax {
-			max = lmax
+		used |= nums[i]
+		if max < i-j+1 {
+			max = i - j + 1
 		}
 	}
 	return max
