@@ -1,27 +1,32 @@
 package leetcode
 
-var dp [1000][1001]int
+import (
+	"fmt"
+)
+
+var MOD int = 1e9 + 7
 
 func numberOfWays(startPos int, endPos int, k int) int {
-	d := endPos - startPos
-	if startPos > endPos {
-		d = -d
-	}
-	return dfs(d, k)
-}
-
-func dfs(d, k int) int {
-	if d < 0 {
-		d = 1
-	}
-	if d == k {
-		return 1
-	}
-	if d > k {
+	if (k-endPos+startPos)%2 != 0 {
 		return 0
 	}
-	if dp[d][k] == 0 {
-		dp[d][k] = (1 + dfs(d+1, k-1) + dfs(d-1, k-1)) % (1e9 + 7)
+	memo := map[string]int{}
+	return dfs(startPos, k, endPos, memo) % MOD
+}
+
+func dfs(pos, k, endPos int, memo map[string]int) int {
+	if k == 0 && pos == endPos {
+		return 1
 	}
-	return dp[d][k] - 1
+	if k == 0 || pos-endPos > k || endPos-pos > k {
+		return 0
+	}
+	key := fmt.Sprintf("%d,%d", pos, k)
+	if v, ok := memo[key]; ok {
+		return v
+	}
+
+	memo[key] = (dfs(pos-1, k-1, endPos, memo)%MOD + dfs(pos+1, k-1, endPos, memo)%MOD) % MOD
+
+	return memo[key]
 }
