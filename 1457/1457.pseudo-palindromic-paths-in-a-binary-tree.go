@@ -35,6 +35,10 @@ func dfs(node *TreeNode, path int) int {
 	counter += dfs(node.Left, path)
 	counter += dfs(node.Right, path)
 	if node.Left == nil && node.Right == nil {
+		// Check whether path is pseudo-palindromic path
+		// This condition is passed if path has only one 1 bit.
+		// path = 0100: path & (path - 1) = 0100 & 0011 = 0
+		// path = 0110: path & (path - 1) = 0100 & 0101 = 0100 (not 0)
 		if path&(path-1) == 0 {
 			counter++
 		}
