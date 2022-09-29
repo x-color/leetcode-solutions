@@ -16,7 +16,7 @@ func abs(a, b int) int {
 
 func findClosestElements(arr []int, k int, x int) []int {
 	l, r := 0, len(arr)-1
-	for r-l > k {
+	for r-l+1 > k {
 		if abs(arr[l], x) > abs(arr[r], x) {
 			l++
 		} else {
@@ -24,12 +24,7 @@ func findClosestElements(arr []int, k int, x int) []int {
 		}
 	}
 
-	ans := make([]int, r-l+1)
-	for i := l; i <= r; i++ {
-		ans = append(ans, arr[i])
-	}
-
-	return ans
+	return arr[l : r+1]
 }
 
 // @lc code=end
